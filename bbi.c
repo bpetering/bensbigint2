@@ -136,7 +136,7 @@ void bbi_dump_binary(bbi_chunk *list) {
     } 
     /* Handle single chunk */
     _bbi_dump_binary_val(buf, list->val);
-    printf("%03d: %s (%p)\n", chunknum, buf); 
+    printf("%03d: %s (%p)\n", chunknum, buf, list); 
 
     putchar('\n');
 }

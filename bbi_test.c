@@ -91,7 +91,6 @@ Test(bbi_structures, list_pad2) {
     cr_assert(_bbi_count_chunks(list_b) == 36);
 }
 
-/*
 Test(bbi_structures, list_copy) {
     bbi_chunk *list = bbi_create_nchunks(10);
     bbi_chunk *listcopy;
@@ -105,7 +104,6 @@ Test(bbi_structures, list_copy) {
         list->val = i;
         list = list->left;
     }
-    printf("hello\n");
     listcopy = bbi_copy(list);
     cr_assert(_bbi_count_chunks(list) == 10);
     while (listcopy->right != NULL) {
@@ -115,7 +113,6 @@ Test(bbi_structures, list_copy) {
         cr_assert(listcopy->val == i);
     }
 }
-*/
 
 /* Storage and retrieval */
 
@@ -126,55 +123,55 @@ Test(bbi_helper, dump_binary) {
     unsigned int val;
 
     val = 0;
-    _bbi_dump_binary(buf, val);
+    _bbi_dump_binary_val(buf, val);
     cr_assert(strcmp(buf, "00000000 00000000 00000000 00000000") == 0); /* TODO assumes 32-bit uint */
 
     val = 1;
-    _bbi_dump_binary(buf, val);
+    _bbi_dump_binary_val(buf, val);
     cr_assert(strcmp(buf, "00000000 00000000 00000000 00000001") == 0);
     
     val = 2;
-    _bbi_dump_binary(buf, val);
+    _bbi_dump_binary_val(buf, val);
     cr_assert(strcmp(buf, "00000000 00000000 00000000 00000010") == 0);
 
     val = 17;
-    _bbi_dump_binary(buf, val);
+    _bbi_dump_binary_val(buf, val);
     cr_assert(strcmp(buf, "00000000 00000000 00000000 00010001") == 0);
 
     val = 255;
-    _bbi_dump_binary(buf, val);
+    _bbi_dump_binary_val(buf, val);
     cr_assert(strcmp(buf, "00000000 00000000 00000000 11111111") == 0);
     
     val = 256;
-    _bbi_dump_binary(buf, val);
+    _bbi_dump_binary_val(buf, val);
     cr_assert(strcmp(buf, "00000000 00000000 00000001 00000000") == 0);
 
     val = 266;
-    _bbi_dump_binary(buf, val);
+    _bbi_dump_binary_val(buf, val);
     cr_assert(strcmp(buf, "00000000 00000000 00000001 00001010") == 0);
 
     val = 266;
-    _bbi_dump_binary(buf, val);
+    _bbi_dump_binary_val(buf, val);
     cr_assert(strcmp(buf, "00000000 00000000 00000001 00001010") == 0);
 
     val = 4194304;
-    _bbi_dump_binary(buf, val);
+    _bbi_dump_binary_val(buf, val);
     cr_assert(strcmp(buf, "00000000 01000000 00000000 00000000") == 0);
 
     val = 16711680;
-    _bbi_dump_binary(buf, val);
+    _bbi_dump_binary_val(buf, val);
     cr_assert(strcmp(buf, "00000000 11111111 00000000 00000000") == 0);
 
     val = 4278190080;
-    _bbi_dump_binary(buf, val);
+    _bbi_dump_binary_val(buf, val);
     cr_assert(strcmp(buf, "11111111 00000000 00000000 00000000") == 0);
     
     val = 4278190339;
-    _bbi_dump_binary(buf, val);
+    _bbi_dump_binary_val(buf, val);
     cr_assert(strcmp(buf, "11111111 00000000 00000001 00000011") == 0);
 
     val = 4294967295;   /* TODO some places not safe */
-    _bbi_dump_binary(buf, val);
+    _bbi_dump_binary_val(buf, val);
     cr_assert(strcmp(buf, "11111111 11111111 11111111 11111111") == 0);
 } 
 

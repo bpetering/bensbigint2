@@ -122,7 +122,7 @@ Test(bbi_structures, list_copy) {
 /* Helper */
 Test(bbi_helper, dump_binary) {
     unsigned n = sizeof(unsigned int)*8+3+1;
-    char buf[sizeof(unsigned int)*8+3+1];   /* 3 spaces, 1 null terminator */
+    char buf[sizeof(unsigned int)*8+3+1];   /* 3 spaces TODO assumes 32bit uint, 1 null terminator */
     unsigned int val;
 
     val = 0;

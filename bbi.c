@@ -130,7 +130,7 @@ void bbi_dump_binary(bbi_chunk *list) {
     }
     while (list->right != NULL) {
         _bbi_dump_binary_val(buf, list->val);
-        printf("%03d: %s\n", chunknum, buf); 
+        printf("%03d: %s (%p)\n", chunknum, buf, list); 
         chunknum++;
         list = list->right;
     } 

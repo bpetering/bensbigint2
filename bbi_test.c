@@ -96,6 +96,7 @@ Test(bbi_structures, list_copy) {
     bbi_chunk *listcopy;
     int i = 0;
 
+    bbi_dump_binary(list);
     cr_assert(_bbi_count_chunks(list) == 10);
     while (list->right != NULL) {
         list = list->right;

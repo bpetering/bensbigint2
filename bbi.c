@@ -162,9 +162,16 @@ void bbi_and(bbi_chunk *list_a, bbi_chunk *list_b) {
     
 }
 
+/*
 int main() {
     bbi_chunk *list = bbi_create();
+    bbi_extend(list, 9);
+    while (list->right != NULL) {
+        list = list->right;
+    }
+    list = list->left;
+    list->val = 4000000000;
     bbi_dump_binary(list);
     bbi_destroy(list);
 }
-
+*/

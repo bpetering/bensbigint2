@@ -1,6 +1,14 @@
+/*
+ * Several logical parts to arbitrary precision:
+ * 1. store large values across multiple atomic storage units (e.g. 32-bit ints)
+ * 2. convert to and from other useful representations e.g. strings
+ * 3. perform operations on the stored large values
+ */
+
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 #include "bbi.h"
 
 bbi_chunk *_bbi_chunk_create() {
@@ -97,6 +105,17 @@ bbi_chunk *bbi_copy(bbi_chunk *list) {
     /* Copy final value */
     newlist->val = list->val;
     return newlist;
+}
+
+/* Load a value from a string, in decimal - caller must bbi_destory()! */
+bbi_chunk *bbi_fromstring_dec(const unsigned char *s) {
+    size_t slen = strlen(s); 
+    unsigned int idx;
+    unsigned int curval;
+    bbi_chunk *list = bbi_create();
+    idx = slen - 1;
+
+    return list;
 }
 
 /* Convert a value to a string represenation in binary - caller must handle memory */

@@ -126,12 +126,12 @@ void bbi_dump_binary(bbi_chunk *list) {
     while (list->left != NULL) {
         list = list->left;
     }
-    while (list->right != NULL) {
+    do {
         _bbi_dump_binary_val(buf, list->val);
         printf("%03d %s\n", chunknum, buf); 
         chunknum++;
         list = list->right;
-    }
+    } while (list->right != NULL);
     putchar('\n');
 }
 

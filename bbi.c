@@ -110,10 +110,18 @@ bbi_chunk *bbi_copy(bbi_chunk *list) {
 /* Load a value from a string, in decimal - caller must bbi_destory()! */
 bbi_chunk *bbi_fromstring_dec(const unsigned char *s) {
     size_t slen = strlen(s); 
-    unsigned int idx;
+    unsigned int sidx;
     unsigned int curval;
+    
     bbi_chunk *list = bbi_create();
-    idx = slen - 1;
+    sidx = slen - 1;
+    curval = 0;
+
+    do {
+        curval *= 10;
+        curval += (s[sidx] - '0'); 
+        sidx--;
+    } while (sidx > 0);
 
     return list;
 }

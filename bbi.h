@@ -18,6 +18,9 @@ void bbi_pad(bbi_chunk *list_a, bbi_chunk *list_b);
 bbi_chunk *bbi_copy(bbi_chunk *list);
 void bbi_destroy(bbi_chunk *list);
 
+/* Loading values */
+bbi_chunk *bbi_fromstring_dec(const unsigned char *s);
+
 /* Bitwise operations */
 void bbi_and(bbi_chunk *list_a, bbi_chunk *list_b);
 

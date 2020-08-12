@@ -23,7 +23,7 @@ void bbi_and(bbi_chunk *list_a, bbi_chunk *list_b);
 
 /* Helper */
 void _bbi_dump_binary_val(unsigned char *buf, unsigned int val);
-void bbi_dump_binary(unsigned char *buf, bbi_chunk *list);
+void bbi_dump_binary(bbi_chunk *list);
 
 #endif
 

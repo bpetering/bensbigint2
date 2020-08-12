@@ -94,6 +94,8 @@ bbi_chunk *bbi_copy(bbi_chunk *list) {
         list = list->left;
         newlist = newlist->left;
     }
+    /* Copy final value */
+    newlist->val = list->val;
     return newlist;
 }
 

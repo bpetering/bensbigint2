@@ -96,22 +96,36 @@ Test(bbi_structures, list_copy) {
     bbi_chunk *listcopy;
     int i = 0;
 
-    bbi_dump_binary(list);
     cr_assert(_bbi_count_chunks(list) == 10);
     while (list->right != NULL) {
         list = list->right;
     }
-    for (i = 0; i < 10 && list->left != NULL; i++) {
+    /* Create some values to copy - 0-9, going towards more-significant bits, 1 per chunk */
+    while (list->left != NULL) {
         list->val = i;
+        i++;
         list = list->left;
     }
+    list->val = i;
+    /*
+    printf("list:\n");
+    bbi_dump_binary(list);
+    */
+
     listcopy = bbi_copy(list);
+    /*
+    printf("list copy:\n");
+    bbi_dump_binary(listcopy);
+    */
     cr_assert(_bbi_count_chunks(list) == 10);
     while (listcopy->right != NULL) {
         listcopy = listcopy->right;
     }
-    for (i = 0; i < 10; i++) {
+    i = 0;
+    while (listcopy->left != NULL) {
         cr_assert(listcopy->val == i);
+        i++;
+        listcopy = listcopy->left;
     }
 }
 

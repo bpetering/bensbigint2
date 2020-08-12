@@ -126,12 +126,16 @@ void bbi_dump_binary(bbi_chunk *list) {
     while (list->left != NULL) {
         list = list->left;
     }
-    do {
+    while (list->right != NULL) {
         _bbi_dump_binary_val(buf, list->val);
         printf("%03d: %s\n", chunknum, buf); 
         chunknum++;
         list = list->right;
-    } while (list->right != NULL);
+    } 
+    /* Handle single chunk */
+    _bbi_dump_binary_val(buf, list->val);
+    printf("%03d: %s\n", chunknum, buf); 
+
     putchar('\n');
 }
 
@@ -156,5 +160,11 @@ void bbi_destroy(bbi_chunk *list) {
 
 void bbi_and(bbi_chunk *list_a, bbi_chunk *list_b) {
     
+}
+
+int main() {
+    bbi_chunk *list = bbi_create();
+    bbi_dump_binary(list);
+    bbi_destroy(list);
 }
 

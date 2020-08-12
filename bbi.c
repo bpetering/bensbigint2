@@ -98,7 +98,7 @@ bbi_chunk *bbi_copy(bbi_chunk *list) {
 }
 
 /* Convert a value to a string represenation in binary - caller must handle memory */
-void _bbi_dump_binary(unsigned char *buf, unsigned int val) {
+void _bbi_dump_binary_val(unsigned char *buf, unsigned int val) {
     size_t uint_size = sizeof(unsigned int);
     unsigned int mask = 1 << (8*uint_size-1); // 8-bit bytes
     int digitcount = 0;
@@ -117,6 +117,22 @@ void _bbi_dump_binary(unsigned char *buf, unsigned int val) {
         mask >>= 1;
     }
     *buf = '\0';
+}
+
+/* Walk chunks from most-significant bit to least, outputing one per line */
+void bbi_dump_binary(bbi_chunk *list) {
+    unsigned char buf[sizeof(unsigned int)*8+3+1];  /* TODO assumes 32-bit unsigned int */
+    unsigned int chunknum = 0;
+    while (list->left != NULL) {
+        list = list->left;
+    }
+    while (list->right != NULL) {
+        _bbi_dump_binary_val(buf, list->val);
+        printf("%03d %s\n", chunknum, buf); 
+        chunknum++;
+        list = list->right;
+    }
+    putchar('\n');
 }
 
 void bbi_destroy(bbi_chunk *list) {

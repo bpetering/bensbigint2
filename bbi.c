@@ -108,16 +108,33 @@ bbi_chunk *bbi_copy(bbi_chunk *list) {
 }
 
 /* Load a value from a string, in decimal - caller must bbi_destory()! */
+/* More usefully, a general-case function to handle at least binary, octal, decimal and hex
+   is a good idea, but this is a starting point */
+/*
+ * Converting a string representation of an integer to an actual value is trivial in any base. 
+   The general algorithm is:
+   - initialise the value variable to 0
+   - start at the right-most digit, and walk to the left-most digit one digit at a time, for each digit
+        - multiply the value variable by the base (e.g. 10)
+        - add the value of the digit to the value variable
+   
+   The challenge is to do this across chunks - because we can't just use one "value variable",
+   we have to use many - and we don't know how many we need in advance.
+
+
+*/
 bbi_chunk *bbi_fromstring_dec(const unsigned char *s) {
     size_t slen = strlen(s); 
     unsigned int sidx;
     unsigned int curval;
+    unsigned int oldcurval;
     
     bbi_chunk *list = bbi_create();
     sidx = slen - 1;
     curval = 0;
 
     do {
+        oldcurval = curval;
         curval *= 10;
         curval += (s[sidx] - '0'); 
         sidx--;

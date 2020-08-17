@@ -5,10 +5,10 @@ int main() {
     unsigned int tmp;
     unsigned int i;
 
-    n = 1 << 30;
+    n = 2000000000;
     for (i = 0; i < 5; i++) {
         tmp = n;
-        n *= 2;
+        n *= 10;
         printf("i = %u\n", i);
         if (n < tmp) {
             printf("wrapround detected!\n");

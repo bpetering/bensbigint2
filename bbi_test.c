@@ -31,6 +31,11 @@ Test(bbi_structures, list_len_1000_extend) {
     cr_assert(_bbi_count_chunks(list) == 1);
     bbi_extend(list, 999);
     cr_assert(_bbi_count_chunks(list) == 1000);
+    /* 
+     * This is testing implementation, not interface,
+       but it's useful for bootstrapping to get our
+       implementation working and can be removed later
+    */
     while (list->left != NULL) {
         list = list->left;
     }
@@ -130,6 +135,44 @@ Test(bbi_structures, list_copy) {
 }
 
 /* Storage and retrieval */
+Test(bbi_storage, load_dec_string_0) {
+    bbi_chunk *new = bbi_fromstring_dec("0");
+    while (new->right != NULL) {
+        new = new->right;
+    }   
+    cr_assert(new->val == 0);
+    bbi_destroy(new);
+}
+
+Test(bbi_storage, load_dec_string_16bits) {
+    bbi_chunk *new = bbi_fromstring_dec("12345");
+    while (new->right != NULL) {
+        new = new->right;
+    }
+    cr_assert(new->val == 12345);
+    bbi_destroy(new);
+}
+
+/* Test either side of 32- and 64-bit boundaries, and a bigger higher boundary */
+Test(bbi_storage, load_dec_string_32bits) {
+    bbi_chunk *new = bbi_fromstring_dec("4294967295");
+    while (new->right != NULL) {
+        new = new->right;
+    }
+    cr_assert(new->val == 4294967295);
+    bbi_destroy(new);
+}
+
+Test(bbi_storage, load_dec_string_32bitsplusone) {
+    bbi_chunk *new = bbi_fromstring_dec("4294967296");
+    while (new->right != NULL) {
+        new = new->right;
+    }
+    cr_assert(new->val == 0);
+    cr_assert(new->left != NULL);
+    cr_assert(new->left->val == 1);
+    bbi_destroy(new);
+}
 
 /* Helper */
 Test(bbi_helper, dump_binary) {

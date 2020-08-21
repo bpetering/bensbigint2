@@ -48,6 +48,12 @@ unsigned int _bbi_count_chunks(bbi_chunk *list) {
     return count;
 }
 
+/* 
+ * Following the principle "be conservative in what you send, and liberal in what you accept",
+ * functions take any chunk in a list to operate on the chunk list, but always return the 
+ * least-significant-bit chunk 
+ */
+
 /* Get the leftmost chunk (Most-Significant Bit) of a chunk list */
 bbi_chunk *_find_left(bbi_chunk *list) {
     while (list->left != NULL) {

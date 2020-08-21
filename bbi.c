@@ -63,6 +63,10 @@ bbi_chunk *bbi_extend(bbi_chunk *list, unsigned int nchunks) {
         ptr->right = list;
         list = ptr;
     }
+    /* Always return LSB chunk as pointer */
+    while (list->right != NULL) {
+        list = list->right;
+    }
     return list;
 }
 
@@ -204,8 +208,10 @@ void bbi_destroy(bbi_chunk *list) {
     list = NULL;
 }
 
-void bbi_and(bbi_chunk *list_a, bbi_chunk *list_b) {
-    
+bbi_chunk *bbi_and(bbi_chunk *list_a, bbi_chunk *list_b) {
+    bbi_chunk *result;
+
+    return result;
 }
 
 /*

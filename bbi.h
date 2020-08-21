@@ -22,11 +22,14 @@ void bbi_destroy(bbi_chunk *list);
 bbi_chunk *bbi_fromstring_dec(const unsigned char *s);
 
 /* Bitwise operations */
-void bbi_and(bbi_chunk *list_a, bbi_chunk *list_b);
+bbi_chunk *bbi_not(bbi_chunk *list);
+bbi_chunk *bbi_and(bbi_chunk *list_a, bbi_chunk *list_b);
 
 /* Helper */
 void _bbi_dump_binary_val(unsigned char *buf, unsigned int val);
 void bbi_dump_binary(bbi_chunk *list);
+bbi_chunk *_find_left(bbi_chunk *list);
+bbi_chunk *_find_right(bbi_chunk *list);
 
 #endif
 

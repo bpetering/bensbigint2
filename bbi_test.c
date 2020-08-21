@@ -3,6 +3,11 @@
 #include <string.h>
 #include "bbi.h"
 
+/* 
+   This is testing implementation, not interface,
+   but it's useful for bootstrapping to get our
+   implementation working and can be removed later
+*/
 Test(bbi_structures, list_len_one) {
     bbi_chunk *list = bbi_create();
     list->val = 0;
@@ -31,14 +36,7 @@ Test(bbi_structures, list_len_1000_extend) {
     cr_assert(_bbi_count_chunks(list) == 1);
     bbi_extend(list, 999);
     cr_assert(_bbi_count_chunks(list) == 1000);
-    /* 
-     * This is testing implementation, not interface,
-       but it's useful for bootstrapping to get our
-       implementation working and can be removed later
-    */
-    while (list->left != NULL) {
-        list = list->left;
-    }
+    list = _find_left(list);
     list->val = 10000;
     i = 0;
     while (list->right != NULL && i < 100) {
@@ -102,9 +100,6 @@ Test(bbi_structures, list_copy) {
     int i = 0;
 
     cr_assert(_bbi_count_chunks(list) == 10);
-    while (list->right != NULL) {
-        list = list->right;
-    }
     /* Create some values to copy - 0-9, going towards more-significant bits, 1 per chunk */
     while (list->left != NULL) {
         list->val = i;
@@ -123,9 +118,6 @@ Test(bbi_structures, list_copy) {
     bbi_dump_binary(listcopy);
     */
     cr_assert(_bbi_count_chunks(list) == 10);
-    while (listcopy->right != NULL) {
-        listcopy = listcopy->right;
-    }
     i = 0;
     while (listcopy->left != NULL) {
         cr_assert(listcopy->val == i);
@@ -135,6 +127,7 @@ Test(bbi_structures, list_copy) {
 }
 
 /* Storage and retrieval */
+/*
 Test(bbi_storage, load_dec_string_0) {
     bbi_chunk *new = bbi_fromstring_dec("0");
     while (new->right != NULL) {
@@ -152,8 +145,10 @@ Test(bbi_storage, load_dec_string_16bits) {
     cr_assert(new->val == 12345);
     bbi_destroy(new);
 }
+*/
 
-/* Test either side of 32- and 64-bit boundaries, and a bigger higher boundary */
+/* Test either side of 32- and 64-bit boundaries, and bigger higher boundaries */
+/*
 Test(bbi_storage, load_dec_string_32bits) {
     bbi_chunk *new = bbi_fromstring_dec("4294967295");
     while (new->right != NULL) {
@@ -173,7 +168,56 @@ Test(bbi_storage, load_dec_string_32bitsplusone) {
     cr_assert(new->left->val == 1);
     bbi_destroy(new);
 }
+*/
 
+/* Bitwise operations */
+Test(bbi_bitwise, not1chunk) {
+    bbi_chunk *list = bbi_create();
+    bbi_chunk *result;
+    list->val = 10;
+    result = bbi_not(list);
+    cr_assert(result != list);
+    cr_assert(result->val == ~ list->val);
+    bbi_destroy(list);
+    bbi_destroy(result);
+}
+
+Test(bbi_bitwise, notmanychunks) {
+    bbi_chunk *list = bbi_create_nchunks(50);
+    bbi_chunk *result;
+    unsigned int i;
+    unsigned int tmp = 1;
+    while (list->left != NULL) {
+        list->val = tmp;
+        list = list->left;
+        tmp++;
+    }
+    list->val = tmp;
+    result = bbi_not(list);
+    for (i = 1; i <= 50; i++) {
+        cr_assert(result->val = ~i);
+        if (result->left != NULL) {
+            result = result->left;
+        }
+    }
+    bbi_destroy(result);
+    bbi_destroy(list);
+}
+
+/*
+Test(bbi_bitwise, and) {
+    bbi_chunk *list_a = bbi_create();
+    bbi_chunk *list_b = bbi_create_nchunks(2);
+    bbi_chunk *result;
+    
+    list_a->val = 0;
+    list_b->val = 0;
+    result = bbi_and(list_a, list_b);
+    cr_assert(result->val == 0);
+    cr_assert(_bbi_count_chunks(result) == 2);
+    cr_assert(result->left->val = 0);
+}
+*/
 /* Helper */
 Test(bbi_helper, dump_binary) {
     unsigned n = sizeof(unsigned int)*8+3+1;

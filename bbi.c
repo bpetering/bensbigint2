@@ -94,12 +94,9 @@ void bbi_pad(bbi_chunk *list_a, bbi_chunk *list_b) {
 bbi_chunk *bbi_copy(bbi_chunk *list) {
     unsigned int listlen = _bbi_count_chunks(list);
     bbi_chunk *newlist = bbi_create_nchunks(listlen);
-    /* Walk both pointers to least significant bit */
+    /* Walk passed pointer to LSB. newlist is guaranteed to already point there */
     while (list->right != NULL) {
         list = list->right;
-    }
-    while (newlist->right != NULL) {
-        newlist = newlist->right;
     }
     while (list->left != NULL) {
         newlist->val = list->val;

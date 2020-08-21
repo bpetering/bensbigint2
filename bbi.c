@@ -48,6 +48,22 @@ unsigned int _bbi_count_chunks(bbi_chunk *list) {
     return count;
 }
 
+/* Get the leftmost chunk (Most-Significant Bit) of a chunk list */
+bbi_chunk *_find_left(bbi_chunk *list) {
+    while (list->left != NULL) {
+        list = list->left;
+    }
+    return list;
+}
+
+/* Get the rightmost chunk (Least-Significant Bit) of a chunk list */
+bbi_chunk *_find_right(bbi_chunk *list) {
+    while (list->right != NULL) {
+        list = list->right;
+    }
+    return list;
+}
+
 /* Extend a list (always on the left) by nchunks */
 bbi_chunk *bbi_extend(bbi_chunk *list, unsigned int nchunks) {
     unsigned int i;
@@ -63,7 +79,7 @@ bbi_chunk *bbi_extend(bbi_chunk *list, unsigned int nchunks) {
         ptr->right = list;
         list = ptr;
     }
-    /* Always return LSB chunk as pointer */
+    /* Always return rightmost (Least-Significant Bit) chunk as pointer */
     while (list->right != NULL) {
         list = list->right;
     }
@@ -186,6 +202,15 @@ void bbi_dump_binary(bbi_chunk *list) {
     putchar('\n');
 }
 
+unsigned int max(unsigned int a, unsigned int b) {
+    if (a > b) {
+        return a;
+    }
+    else {
+        return b;
+    }
+}
+
 void bbi_destroy(bbi_chunk *list) {
     bbi_chunk *to_free;
     
@@ -205,9 +230,42 @@ void bbi_destroy(bbi_chunk *list) {
     list = NULL;
 }
 
+/* Bitwise NOT a value */
+/*
+bbi_chunk *bbi_not(bbi_chunk *list) {
+    while (list->right != NULL) {
+        list = list->right;
+    }
+    while (list->left != NULL) {
+        list->val = ~ list->val;
+        list = list->left;
+    }
+    list->val = ~ list->val;
+}
+*/
+
+/* Bitwise AND two values. If one chunk list is longer than the other, the missing values are implicitly 
+   all 0 bits */
 bbi_chunk *bbi_and(bbi_chunk *list_a, bbi_chunk *list_b) {
     bbi_chunk *result;
+    unsigned int len_a;
+    unsigned int len_b;
+    unsigned int result_len;
+    len_a = _bbi_count_chunks(list_a);
+    len_b = _bbi_count_chunks(list_b);
+    result_len = max(len_a, len_b);
+    result = bbi_create_nchunks(result_len);
 
+    /* Walk both pointers to LSB chunk. result is already at LSB */
+    while (list_a->right != NULL) {
+        list_a = list_a->right;
+    }
+    while (list_b->right != NULL) {
+        list_b = list_b->right;
+    }
+    while (list_a->left != NULL && list_b->left != NULL) {
+        result->val = list_a->val & list_b->val; 
+    }
     return result;
 }
 

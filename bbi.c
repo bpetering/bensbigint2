@@ -36,10 +36,8 @@ bbi_chunk *bbi_create_nchunks(unsigned int nchunks) {
 
 unsigned int _bbi_count_chunks(bbi_chunk *list) {
     unsigned int count = 0;
-    
-    while (list->left != NULL) {
-        list = list->left;
-    }
+   
+    list = _find_left(list);
     count = 1;
     while (list->right != NULL) {
         list = list->right;
@@ -76,9 +74,7 @@ bbi_chunk *bbi_extend(bbi_chunk *list, unsigned int nchunks) {
     bbi_chunk *ptr;
 
     assert(nchunks > 0);    /* TODO assertion disabling */
-    while (list->left != NULL) {
-        list = list->left;
-    }
+    list = _find_left(list);
     for (i = 0; i < nchunks; i++) {
         ptr = _bbi_chunk_create();
         list->left = ptr;
@@ -86,10 +82,7 @@ bbi_chunk *bbi_extend(bbi_chunk *list, unsigned int nchunks) {
         list = ptr;
     }
     /* Always return rightmost (Least-Significant Bit) chunk as pointer */
-    while (list->right != NULL) {
-        list = list->right;
-    }
-    return list;
+    return _find_right(list);
 }
 
 /* Pad lists a and b to be the same length, whichever is currently longest */
@@ -116,10 +109,8 @@ void bbi_pad(bbi_chunk *list_a, bbi_chunk *list_b) {
 bbi_chunk *bbi_copy(bbi_chunk *list) {
     unsigned int listlen = _bbi_count_chunks(list);
     bbi_chunk *newlist = bbi_create_nchunks(listlen);
-    /* Walk passed pointer to LSB. newlist is guaranteed to already point there */
-    while (list->right != NULL) {
-        list = list->right;
-    }
+
+    list = _find_right(list);
     while (list->left != NULL) {
         newlist->val = list->val;
         list = list->left;
@@ -127,7 +118,7 @@ bbi_chunk *bbi_copy(bbi_chunk *list) {
     }
     /* Copy final value */
     newlist->val = list->val;
-    return newlist;
+    return _find_right(newlist);
 }
 
 /* Load a value from a string, in decimal - caller must bbi_destory()! */
@@ -220,10 +211,7 @@ unsigned int max(unsigned int a, unsigned int b) {
 void bbi_destroy(bbi_chunk *list) {
     bbi_chunk *to_free;
     
-    /* walk to MSB end of list */
-    while (list->left != NULL) {
-        list = list->left;
-    }
+    list = _find_left(list);
     while (list->right != NULL) {
         to_free = list;
         list = list->right;
@@ -259,13 +247,8 @@ bbi_chunk *bbi_and(bbi_chunk *list_a, bbi_chunk *list_b) {
     result_len = max(len_a, len_b);
     result = bbi_create_nchunks(result_len);
 
-    /* Walk both pointers to LSB chunk. result is already at LSB */
-    while (list_a->right != NULL) {
-        list_a = list_a->right;
-    }
-    while (list_b->right != NULL) {
-        list_b = list_b->right;
-    }
+    list_a = _find_right(list_a);
+    list_b = _find_right(list_b);
     while (list_a->left != NULL && list_b->left != NULL) {
         result->val = list_a->val & list_b->val; 
     }

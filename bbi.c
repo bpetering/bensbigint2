@@ -231,18 +231,15 @@ void bbi_destroy(bbi_chunk *list) {
 }
 
 /* Bitwise NOT a value */
-/*
 bbi_chunk *bbi_not(bbi_chunk *list) {
-    while (list->right != NULL) {
-        list = list->right;
-    }
+    list = _find_right(list);
     while (list->left != NULL) {
         list->val = ~ list->val;
         list = list->left;
     }
     list->val = ~ list->val;
+    return _find_right(list);
 }
-*/
 
 /* Bitwise AND two values. If one chunk list is longer than the other, the missing values are implicitly 
    all 0 bits */

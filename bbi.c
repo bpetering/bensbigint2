@@ -234,7 +234,7 @@ bbi_chunk *bbi_not(bbi_chunk *list) {
         list = list->left;
     }
     list->val = ~ list->val;
-    return _list_right;
+    return list_right;
 }
 
 /* Bitwise AND two values. If one chunk list is longer than the other, the missing values are implicitly 

@@ -289,22 +289,34 @@ bbi_chunk *bbi_and(bbi_chunk *list_a, bbi_chunk *list_b) {
     return bbi_and_inplace(result, list_b);
 }
 
-bbi_chunk *bbi_or(bbi_chunk *list_a, bbi_chunk *list_b) {
-
-}
-
+/* Bitwise OR two values, calling semantics as bbi_and_inplace(). */
 bbi_chunk *bbi_or_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
+    unsigned int len_a;
+    unsigned int len_b;
+    unsigned int result_len;
+
+    len_a = _bbi_count_chunks(list_a);
+    len_b = _bbi_count_chunks(list_b);
+    result_len = max(len_a, len_b);
+    if (result_len > len_a) {
+        bbi_extend(list_a, result_len - len_a);
+    }
 
 }
 
-bbi_chunk *bbi_xor(bbi_chunk *list_a, bbi_chunk *list_b) {
-
+bbi_chunk *bbi_or(bbi_chunk *list_a, bbi_chunk *list_b) {
+    bbi_chunk *result = bbi_copy(list_a);
+    return bbi_or_inplace(result, list_b);
 }
 
 bbi_chunk *bbi_xor_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
 
 }
 
+bbi_chunk *bbi_xor(bbi_chunk *list_a, bbi_chunk *list_b) {
+    bbi_chunk *result = bbi_copy(list_a);
+    return bbi_xor_inplace(result, list_b);
+}
 
 /*
 int main() {

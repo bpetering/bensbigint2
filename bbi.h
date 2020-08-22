@@ -25,6 +25,10 @@ void bbi_pad_both(bbi_chunk *list_a, bbi_chunk *list_b);
 bbi_chunk *bbi_copy(bbi_chunk *list);
 void bbi_destroy(bbi_chunk *list);
 
+/* Arithmetic */
+bbi_chunk *bbi_add_inplace(bbi_chunk *list_a, bbi_chunk *list_b);
+bbi_chunk *bbi_add(bbi_chunk *list_a, bbi_chunk *list_b);
+
 /* Loading values */
 bbi_chunk *bbi_fromstring_dec(const unsigned char *s);
 

@@ -138,6 +138,14 @@ bbi_chunk *bbi_copy(bbi_chunk *list) {
     return _find_right(newlist);
 }
 
+bbi_chunk *bbi_add_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
+
+}
+
+bbi_chunk *bbi_add(bbi_chunk *list_a, bbi_chunk *list_b) {
+
+}
+
 /* Load a value from a string, in decimal - caller must bbi_destory()! */
 /* More usefully, a general-case function to handle at least binary, octal, decimal and hex
    is a good idea, but this is a starting point */

@@ -241,6 +241,14 @@ void bbi_destroy(bbi_chunk *list) {
     list = NULL;
 }
 
+/* Abstract the "operate on two lists, doing something to each pair of values at a time",
+   Takes a pair of lists and a function pointer taking two values and returning a value. */
+/*
+bbi_chunk *bbi_for_inplace(bbi_chunk *list_a, bbi_chunk *list_b, unsigned int (*func)(unsigned int x, unsigned int y)) {
+    ...
+}
+*/
+
 /* Bitwise operations have two functions for each operation - an in-place operation, and one
    that produces a new bigint, Binary in-place operations store the result in the
    first operand */

@@ -45,7 +45,7 @@ bbi_chunk *bbi_or_inplace(bbi_chunk *list_a, bbi_chunk *list_b);
 bbi_chunk *bbi_xor(bbi_chunk *list_a, bbi_chunk *list_b);
 bbi_chunk *bbi_xor_inplace(bbi_chunk *list_a, bbi_chunk *list_b);
 
-unsigned int *bbi_get_bit(bbi_chunk *list, unsigned int bitidx);
+unsigned int bbi_get_bit(bbi_chunk *list, unsigned int bitidx);
 
 /* Helper */
 void _bbi_dump_binary_val(unsigned char *buf, unsigned int val);

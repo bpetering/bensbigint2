@@ -348,7 +348,7 @@ bbi_chunk *bbi_xor(bbi_chunk *list_a, bbi_chunk *list_b) {
 
 /* Get the bit with index bitidx from a chunk list. Bit index 0 is the
    rightmost (least significant) bit, to the left is bit index 1, and so on. */
-unsigned int *bbi_get_bit(bbi_chunk *list, unsigned int bitidx) {
+unsigned int bbi_get_bit(bbi_chunk *list, unsigned int bitidx) {
     unsigned int chunkbitsize = sizeof(unsigned int) * 8;   /* TODO 8-bit byte assumption */
     unsigned int i;
     unsigned int containing_chunk;

@@ -13,7 +13,7 @@
 
 bbi_chunk *_bbi_chunk_create() {
     bbi_chunk *ptr = malloc(sizeof(bbi_chunk));
-    ptr->val = (unsigned int) 0;
+    ptr->val = 0;       /* TODO C rules for assigning a literal to a type */
     ptr->left = NULL;
     ptr->right = NULL;
     return ptr;
@@ -258,6 +258,7 @@ bbi_chunk *bbi_and_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
     if (result_len > len_a) {
         bbi_extend(list_a, result_len - len_a);
     }
+    assert(_bbi_count_chunks(list_a) == _bbi_count_chunks(list_b));
 
     list_a = _find_right(list_a);
     list_b = _find_right(list_b);
@@ -266,13 +267,19 @@ bbi_chunk *bbi_and_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
         list_a = list_a->left;
         list_b = list_b->left;
     }
-    /* Three cases to consider: lists have equal length, then handle the final & op. List a is shorter,
-       and was extended, then set extended values to 0, since anything & 0 == 0. List b is shorter,
-       then set remaining values in list a = 0. */
+    /* Two cases to consider: 1) lists have equal length, then handle the final & op. 2) lists have 
+       unequal length, then set abs(len_a - len_b) values to 0, since 0 & anything == 0. */
     if (len_a == len_b) {
         list_a->val &= list_b->val;
     }
-
+    else {
+        while (list_a->left != NULL) {
+            list_a->val = 0;
+            list_a = list_a->left;
+        }
+        list_a->val = 0;
+    }
+    return _find_right(list_a);
 }
 
 bbi_chunk *bbi_and(bbi_chunk *list_a, bbi_chunk *list_b) {

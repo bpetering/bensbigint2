@@ -289,6 +289,23 @@ bbi_chunk *bbi_and(bbi_chunk *list_a, bbi_chunk *list_b) {
     return bbi_and_inplace(result, list_b);
 }
 
+bbi_chunk *bbi_or(bbi_chunk *list_a, bbi_chunk *list_b) {
+
+}
+
+bbi_chunk *bbi_or_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
+
+}
+
+bbi_chunk *bbi_xor(bbi_chunk *list_a, bbi_chunk *list_b) {
+
+}
+
+bbi_chunk *bbi_xor_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
+
+}
+
+
 /*
 int main() {
     bbi_chunk *list = bbi_create();

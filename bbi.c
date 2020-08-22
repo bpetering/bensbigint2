@@ -138,8 +138,30 @@ bbi_chunk *bbi_copy(bbi_chunk *list) {
     return _find_right(newlist);
 }
 
+/* Reuse general structure for "do things to pairs of lists" */
 bbi_chunk *bbi_add_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
+    unsigned int len_a;
+    unsigned int len_b;
+    unsigned int tmp;
+    unsigned int carry;
 
+    /* 1. add mod (2**chunkbitsize)
+       2. if result is less than either arg, there's a carry bit
+       3. ...
+       */
+    len_a = _bbi_count_chunks(list_a);
+    len_b = _bbi_count_chunks(list_b);
+    if (len_a < len_b) {
+        bbi_extend(list_a, len_b - len_a);
+    }
+
+    list_a = _find_right(list_a);
+    list_b = _find_right(list_b);
+    while (list_a->left != NULL && list_b->left != NULL) {
+        tmp = list_a->val + list_b->val;
+        list_a = list_a->left;
+        list_b = list_b->left;
+    }
 }
 
 bbi_chunk *bbi_add(bbi_chunk *list_a, bbi_chunk *list_b) {

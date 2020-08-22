@@ -76,6 +76,8 @@ Test(bbi_structures, list_pad_both_1chunk) {
     bbi_pad_both(list_a, list_b);
     cr_assert(_bbi_count_chunks(list_a) == 3);
     cr_assert(_bbi_count_chunks(list_b) == 3);
+    bbi_destroy(list_a);
+    bbi_destroy(list_b);
 }
 
 Test(bbi_structures, list_pad_both_manychunks) {
@@ -93,6 +95,8 @@ Test(bbi_structures, list_pad_both_manychunks) {
     bbi_pad_both(list_a, list_b);
     cr_assert(_bbi_count_chunks(list_a) == 36);
     cr_assert(_bbi_count_chunks(list_b) == 36);
+    bbi_destroy(list_a);
+    bbi_destroy(list_b);
 }
 
 Test(bbi_structures, list_pad_first) {
@@ -127,13 +131,15 @@ Test(bbi_structures, list_copy) {
     printf("list copy:\n");
     bbi_dump_binary(listcopy);
     */
-    cr_assert(_bbi_count_chunks(list) == 10);
+    cr_assert(_bbi_count_chunks(listcopy) == 10);
     i = 0;
     while (listcopy->left != NULL) {
         cr_assert(listcopy->val == i);
         i++;
         listcopy = listcopy->left;
     }
+    bbi_destroy(list);
+    bbi_destroy(listcopy);
 }
 
 /* Storage and retrieval */
@@ -186,6 +192,7 @@ Test(bbi_bitwise, not_inplace_copy_1chunk) {
     list->val = 100;
     bbi_not_inplace(list);
     cr_assert(list->val == ~ (unsigned int) 100);
+    bbi_destroy(list);
 }
 
 Test(bbi_bitwise, not_inplace_manychunks) {
@@ -254,6 +261,8 @@ Test(bbi_bitwise, and_inplace_1chunk) {
     list_b->val = 1354907759;
     bbi_and_inplace(list_a, list_b);
     cr_assert(list_a->val == 12714021);
+    bbi_destroy(list_a);
+    bbi_destroy(list_b);
 }
 
 Test(bbi_bitwise, and_inplace_manychunks_unequal) {
@@ -274,6 +283,8 @@ Test(bbi_bitwise, and_inplace_manychunks_unequal) {
         list_a = list_a->left;
         cr_assert(list_a->val == 0);
     }
+    bbi_destroy(list_a);
+    bbi_destroy(list_b);
 }
 
 Test(bbi_bitwise, and_inplace_manychunks_equal) {
@@ -302,6 +313,8 @@ Test(bbi_bitwise, and_inplace_manychunks_equal) {
     cr_assert(list_a->left->left->val == 1133091);
     cr_assert(list_a->left->left->left->val == 1063);
     cr_assert(list_a->left->left->left->left->val == 268040);
+    bbi_destroy(list_a);
+    bbi_destroy(list_b);
 }
 
 /* Helper */

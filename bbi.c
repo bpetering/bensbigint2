@@ -256,9 +256,8 @@ bbi_chunk *bbi_and_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
 
     len_a = _bbi_count_chunks(list_a);
     len_b = _bbi_count_chunks(list_b);
-    result_len = max(len_a, len_b);
-    if (result_len > len_a) {
-        bbi_extend(list_a, result_len - len_a);
+    if (len_b > len_a) {
+        bbi_extend(list_a, len_b - len_a);
     }
     assert(_bbi_count_chunks(list_a) == _bbi_count_chunks(list_b));
 
@@ -269,18 +268,7 @@ bbi_chunk *bbi_and_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
         list_a = list_a->left;
         list_b = list_b->left;
     }
-    /* Two cases to consider: 1) lists have equal length, then handle the final & op. 2) lists have 
-       unequal length, then set abs(len_a - len_b) values to 0, since 0 & anything == 0. */
-    if (len_a == len_b) {
-        list_a->val &= list_b->val;
-    }
-    else {
-        while (list_a->left != NULL) {
-            list_a->val = 0;
-            list_a = list_a->left;
-        }
-        list_a->val = 0;
-    }
+    list_a->val &= list_b->val;
     return _find_right(list_a);
 }
 
@@ -302,6 +290,21 @@ bbi_chunk *bbi_or_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
         bbi_extend(list_a, result_len - len_a);
     }
 
+    list_a = _find_right(list_a);
+    list_b = _find_right(list_b);
+    while (list_a->left != NULL && list_b->left != NULL) {
+        list_a->val |= list_b->val;
+        list_a = list_a->left;
+        list_b = list_b->left;
+    }
+    /* If lists same length, handle final op, otherwise if list_b was longer, copy over values from there,
+       because 0 | x == x */
+    if (len_a == len_b) {
+        list_a->val |= list_b->val;
+    }
+    else if (len_b > len_a) {
+
+    }
 }
 
 bbi_chunk *bbi_or(bbi_chunk *list_a, bbi_chunk *list_b) {

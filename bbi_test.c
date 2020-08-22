@@ -4,9 +4,10 @@
 #include "bbi.h"
 
 /* 
-   This is testing implementation, not interface,
+   A lot of thise code is testing implementation, not interface,
    but it's useful for bootstrapping to get our
-   implementation working and can be removed later
+   implementation working and can be removed later. (The alternative
+   is lots and lots of assertions in bbi.c, making it unreadable.)
 */
 Test(bbi_structures, list_len_one) {
     bbi_chunk *list = bbi_create();
@@ -252,7 +253,11 @@ Test(bbi_bitwise, and_inplace_manychunks_unequal) {
     unsigned int i;
 
     list_a->val = 284464592;
-    list_b->val = 2258786334;
+    list_b->val = 2258786;
+    list_b->left->val = 249875213;
+    list_b->left->left->val = 2234;
+    list_b->left->left->left->val = 8079872;
+    list_b->left->left->left->left->val = 176813765;
     bbi_and_inplace(list_a, list_b);
     cr_assert(_bbi_count_chunks(list_a) == 5);
     cr_assert(list_a->val == 10489872);
@@ -260,6 +265,34 @@ Test(bbi_bitwise, and_inplace_manychunks_unequal) {
         list_a = list_a->left;
         cr_assert(list_a->val == 0);
     }
+}
+
+Test(bbi_bitwise, and_inplace_manychunks_equal) {
+    bbi_chunk *list_a = bbi_create_nchunks(5);
+    bbi_chunk *list_b = bbi_create_nchunks(5);
+    unsigned int i;
+
+    list_a->val = 87498273;
+    list_b->val = 372872979;
+    
+    list_a->left->val = 7282987;
+    list_b->left->val = 123456789;
+
+    list_a->left->left->val = 34982763;
+    list_b->left->left->val = 7437987;
+
+    list_a->left->left->left->val = 92873847;
+    list_b->left->left->left->val = 7983;
+
+    list_a->left->left->left->left->val = 9287432;
+    list_b->left->left->left->left->val = 72638346;
+
+    bbi_and_inplace(list_a, list_b);
+    cr_assert(list_a->val == 70325761);
+    cr_assert(list_a->left->val == 4915457);
+    cr_assert(list_a->left->left->val == 1133091);
+    cr_assert(list_a->left->left->left->val == 1063);
+    cr_assert(list_a->left->left->left->left->val == 268040);
 }
 
 /* Helper */

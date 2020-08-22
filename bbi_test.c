@@ -232,20 +232,20 @@ Test(bbi_bitwise, not_copy_manychunks) {
     bbi_destroy(list);
 }
 
-/*
-Test(bbi_bitwise, and) {
+Test(bbi_bitwise, and_inplace_1chunk) {
     bbi_chunk *list_a = bbi_create();
-    bbi_chunk *list_b = bbi_create_nchunks(2);
-    bbi_chunk *result;
-    
-    list_a->val = 0;
-    list_b->val = 0;
-    result = bbi_and(list_a, list_b);
-    cr_assert(result->val == 0);
-    cr_assert(_bbi_count_chunks(result) == 2);
-    cr_assert(result->left->val = 0);
+    bbi_chunk *list_b = bbi_create();
+    list_a->val = 1354907759;
+    list_b->val = 2346067365;
+    bbi_and_inplace(list_a, list_b);
+    cr_assert(list_a->val == 12714021);
+
+    list_a->val = 2346067365;
+    list_b->val = 1354907759;
+    bbi_and_inplace(list_a, list_b);
+    cr_assert(list_a->val == 12714021);
 }
-*/
+
 /* Helper */
 Test(bbi_helper, dump_binary) {
     unsigned n = sizeof(unsigned int)*8+3+1;

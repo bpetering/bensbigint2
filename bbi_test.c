@@ -260,7 +260,8 @@ Test(bbi_bitwise, and_inplace_manychunks_unequal) {
     list_b->left->left->left->left->val = 176813765;
     bbi_and_inplace(list_a, list_b);
     cr_assert(_bbi_count_chunks(list_a) == 5);
-    cr_assert(list_a->val == 10489872);
+    printf("%u\n", list_a->val);
+    cr_assert(list_a->val == 2102592);
     for (i = 0; i < 4; i++) {
         list_a = list_a->left;
         cr_assert(list_a->val == 0);

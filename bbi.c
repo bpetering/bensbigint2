@@ -150,7 +150,12 @@ bbi_chunk *bbi_copy(bbi_chunk *list) {
         - add the value of the digit to the value variable
    
    The challenge is to do this across chunks - because we can't just use one "value variable",
-   we have to use many - and we don't know how many we need in advance.
+   we have to use many.
+
+   We know how many chunks we need - the maximum numbers of bits needed to hold to multiplication 
+   of two binary values is the sum of the bits used in the operands, excluding leading 0 bits. For
+   convenience we can assume that there's no leading 0 bits, and sum the number chunks in the operands
+   to get the number of chunks needed to store the result.
 
 
 */

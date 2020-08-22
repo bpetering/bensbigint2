@@ -68,7 +68,7 @@ Test(bbi_structures, list_len_1000_create) {
     bbi_destroy(list);
 }
 
-Test(bbi_structures, list_pad1) {
+Test(bbi_structures, list_pad_both_1chunk) {
     bbi_chunk *list_a = bbi_create_nchunks(3);
     bbi_chunk *list_b = bbi_create();
     cr_assert(_bbi_count_chunks(list_a) == 3);
@@ -78,7 +78,7 @@ Test(bbi_structures, list_pad1) {
     cr_assert(_bbi_count_chunks(list_b) == 3);
 }
 
-Test(bbi_structures, list_pad2) {
+Test(bbi_structures, list_pad_both_manychunks) {
     bbi_chunk *list_a = bbi_create();
     bbi_chunk *list_b = bbi_create();
     bbi_extend(list_a, 15);
@@ -93,6 +93,15 @@ Test(bbi_structures, list_pad2) {
     bbi_pad_both(list_a, list_b);
     cr_assert(_bbi_count_chunks(list_a) == 36);
     cr_assert(_bbi_count_chunks(list_b) == 36);
+}
+
+Test(bbi_structures, list_pad_first) {
+    bbi_chunk *list_a = bbi_create();
+    bbi_chunk *list_b = bbi_create_nchunks(20);
+    bbi_pad_first(list_a, list_b);
+    cr_assert(_bbi_count_chunks(list_a) == 20);
+    bbi_destroy(list_a);
+    bbi_destroy(list_b);
 }
 
 Test(bbi_structures, list_copy) {

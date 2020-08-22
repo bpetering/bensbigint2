@@ -1,6 +1,9 @@
 #ifndef BBI_H
 #define BBI_H
 
+/* TODO optimization, maybe, after benchmarking: store chunks in a structure with better cache locality - 
+   contiguously allocated like an array, with sizing chosen to only reallocate, on average, a small
+   percentage of the time (see Java HashMap for example of efficient realloc) */
 struct bbi_chunk {
     unsigned int val;
     struct bbi_chunk *left;

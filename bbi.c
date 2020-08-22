@@ -34,6 +34,7 @@ bbi_chunk *bbi_create_nchunks(unsigned int nchunks) {
     return bbi_extend(ptr, diff);
 }
 
+/* TODO optimization: chunk lists store their current length */
 unsigned int _bbi_count_chunks(bbi_chunk *list) {
     unsigned int count = 0;
    
@@ -225,7 +226,8 @@ void bbi_destroy(bbi_chunk *list) {
 }
 
 /* Bitwise operations have two functions for each operation - an in-place operation, and one
-   that produces a new bigint */
+   that produces a new bigint, Binary in-place operations store the result in the
+   first operand */
 
 /* Bitwise NOT a value */
 bbi_chunk *bbi_not_inplace(bbi_chunk *list) {
@@ -244,28 +246,36 @@ bbi_chunk *bbi_not(bbi_chunk *list) {
     return bbi_not_inplace(result);
 }
 
-bbi_chunk *bbi_and_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
-
-}
-
 /* Bitwise AND two values. If one chunk list is longer than the other, the missing values are implicitly 
-   all 0 bits */
-bbi_chunk *bbi_and(bbi_chunk *list_a, bbi_chunk *list_b) {
-    bbi_chunk *result;
+   all 0 bits. In-place version stores result in first operand, and extends to length of second operand
+   if it's smaller. */
+bbi_chunk *bbi_and_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
     unsigned int len_a;
     unsigned int len_b;
-    unsigned int result_len;
     len_a = _bbi_count_chunks(list_a);
     len_b = _bbi_count_chunks(list_b);
     result_len = max(len_a, len_b);
-    result = bbi_create_nchunks(result_len);
+    if (result_len > len_a) {
+        bbi_extend(list_a, result_len - len_a);
+    }
 
     list_a = _find_right(list_a);
     list_b = _find_right(list_b);
     while (list_a->left != NULL && list_b->left != NULL) {
-        result->val = list_a->val & list_b->val; 
+        list_a->val &= list_b->val;
+        list_a = list_a->left;
+        list_b = list_b->left;
     }
-    return result;
+    /* Three cases to consider: lists have equal length, then handle the final & op. List a is shorter,
+       and was extended, then set extended values to 0, since anything & 0 == 0. List b is shorter,
+       then set remaining values in list a = 0. */
+    if (len_a == len_b) {
+        list_a->val &= list_b->val;
+    }
+}
+
+bbi_chunk *bbi_and(bbi_chunk *list_a, bbi_chunk *list_b) {
+    
 }
 
 /*

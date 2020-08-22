@@ -252,6 +252,8 @@ bbi_chunk *bbi_not(bbi_chunk *list) {
 bbi_chunk *bbi_and_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
     unsigned int len_a;
     unsigned int len_b;
+    unsigned int result_len;
+
     len_a = _bbi_count_chunks(list_a);
     len_b = _bbi_count_chunks(list_b);
     result_len = max(len_a, len_b);

@@ -246,6 +246,22 @@ Test(bbi_bitwise, and_inplace_1chunk) {
     cr_assert(list_a->val == 12714021);
 }
 
+Test(bbi_bitwise, and_inplace_manychunks_unequal) {
+    bbi_chunk *list_a = bbi_create_nchunks(1);
+    bbi_chunk *list_b = bbi_create_nchunks(5);
+    unsigned int i;
+
+    list_a->val = 284464592;
+    list_b->val = 2258786334;
+    bbi_and_inplace(list_a, list_b);
+    cr_assert(_bbi_count_chunks(list_a) == 5);
+    cr_assert(list_a->val == 10489872);
+    for (i = 0; i < 4; i++) {
+        list_a = list_a->left;
+        cr_assert(list_a->val == 0);
+    }
+}
+
 /* Helper */
 Test(bbi_helper, dump_binary) {
     unsigned n = sizeof(unsigned int)*8+3+1;

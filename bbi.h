@@ -20,7 +20,8 @@ bbi_chunk *bbi_create();
 bbi_chunk *bbi_create_nchunks(unsigned int nchunks);
 unsigned int _bbi_count_chunks(bbi_chunk *list);
 bbi_chunk *bbi_extend(bbi_chunk *list, unsigned int nchunks);
-void bbi_pad(bbi_chunk *list_a, bbi_chunk *list_b);
+bbi_chunk *bbi_pad_first(bbi_chunk *list_a, bbi_chunk *list_b);
+void bbi_pad_both(bbi_chunk *list_a, bbi_chunk *list_b);
 bbi_chunk *bbi_copy(bbi_chunk *list);
 void bbi_destroy(bbi_chunk *list);
 

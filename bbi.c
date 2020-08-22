@@ -86,8 +86,24 @@ bbi_chunk *bbi_extend(bbi_chunk *list, unsigned int nchunks) {
     return _find_right(list);
 }
 
+/* Pad list_a only to be at least as long as list_b,
+   This was repeated in bbi_{and,or,xor}_inplace() - factor it out */
+bbi_chunk *bbi_pad_first(bbi_chunk *list_a, bbi_chunk *list_b) {
+    unsigned int len_a;
+    unsigned int len_b;
+
+    len_a = _bbi_count_chunks(list_a);
+    len_b = _bbi_count_chunks(list_b);
+    if (len_a > len_b || len_a == len_b) {
+        return _find_right(list_a);
+    }
+    bbi_extend(list_a, len_b - len_a);
+    assert(_bbi_count_chunks(list_a) == _bbi_count_chunks(list_b));
+    return _find_right(list_a);
+}
+
 /* Pad lists a and b to be the same length, whichever is currently longest */
-void bbi_pad(bbi_chunk *list_a, bbi_chunk *list_b) {
+void bbi_pad_both(bbi_chunk *list_a, bbi_chunk *list_b) {
     unsigned int list_a_len;
     unsigned int list_b_len;
     unsigned int diff;
@@ -250,25 +266,15 @@ bbi_chunk *bbi_not(bbi_chunk *list) {
    all 0 bits. In-place version stores result in first operand, and extends to length of second operand
    if it's smaller. */
 bbi_chunk *bbi_and_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
-    unsigned int len_a;
-    unsigned int len_b;
-    unsigned int result_len;
-
-    len_a = _bbi_count_chunks(list_a);
-    len_b = _bbi_count_chunks(list_b);
-    if (len_b > len_a) {
-        bbi_extend(list_a, len_b - len_a);
-    }
-    assert(_bbi_count_chunks(list_a) == _bbi_count_chunks(list_b));
-
-    list_a = _find_right(list_a);
+    list_a = bbi_pad_first(list_a, list_b);
     list_b = _find_right(list_b);
     while (list_a->left != NULL && list_b->left != NULL) {
         list_a->val &= list_b->val;
         list_a = list_a->left;
         list_b = list_b->left;
     }
-    /* TODO optimization: if list lengths were originally unequal, just copy 0 values, since x&0 == 0 */
+    /* TODO optimization: if list lengths were originally unequal, just copy 0 values, since x&0 == 0 - 
+       similar for bbi_or_inplace(), bbi_xor_inplace() */
     list_a->val &= list_b->val;     
     return _find_right(list_a);
 }
@@ -280,18 +286,7 @@ bbi_chunk *bbi_and(bbi_chunk *list_a, bbi_chunk *list_b) {
 
 /* Bitwise OR two values, calling semantics as bbi_and_inplace(). */
 bbi_chunk *bbi_or_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
-    unsigned int len_a;
-    unsigned int len_b;
-    unsigned int result_len;
-
-    len_a = _bbi_count_chunks(list_a);
-    len_b = _bbi_count_chunks(list_b);
-    if (len_b > len_a) {
-        bbi_extend(list_a, len_b - len_a);
-    }
-    assert(_bbi_count_chunks(list_a) == _bbi_count_chunks(list_b));
-
-    list_a = _find_right(list_a);
+    list_a = bbi_pad_first(list_a, list_b);
     list_b = _find_right(list_b);
     while (list_a->left != NULL && list_b->left != NULL) {
         list_a->val |= list_b->val;
@@ -307,7 +302,18 @@ bbi_chunk *bbi_or(bbi_chunk *list_a, bbi_chunk *list_b) {
     return bbi_or_inplace(result, list_b);
 }
 
+/* These now have identical structure apart from the operation used. This is a prime example
+   of where generic types should be used, but C doesn't have them */
 bbi_chunk *bbi_xor_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
+    list_a = bbi_pad_first(list_a, list_b);
+    list_b = _find_right(list_b);
+    while (list_a->left != NULL && list_b->left != NULL) {
+        list_a->val ^= list_b->val;
+        list_a = list_a->left;
+        list_b = list_b->left;
+    }
+    list_a->val ^= list_b->val;
+    return _find_right(list_a);
 
 }
 

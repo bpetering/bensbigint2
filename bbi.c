@@ -156,21 +156,23 @@ bbi_chunk *bbi_copy(bbi_chunk *list) {
 */
 bbi_chunk *bbi_fromstring_dec(const unsigned char *s) {
     size_t slen = strlen(s); 
-    long sidx;      /* TODO size_t and long type compatibility */
+    size_t sidx;
     unsigned int curval;
     unsigned int oldcurval;
     
     bbi_chunk *list = bbi_create();
-    sidx = slen - 1;
+    sidx = 0;
     curval = 0;
 
-    do {
-        oldcurval = curval;
+    while (sidx < slen) {
         curval *= 10;
-        curval += (s[sidx] - '0'); 
-        sidx--;
-    } while (sidx > 0);
+        /* ASCII Arabic numeral representation has the nice property that you can get the actual value
+           of the digit represented by the character by substracting 0x30, or more clearly, '0' */
+        curval += (s[sidx] - '0');
+        sidx++;
+    };
 
+    list->val = curval;
     return list;
 }
 

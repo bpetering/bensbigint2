@@ -152,7 +152,6 @@ Test(bbi_storage, load_dec_string_0) {
     bbi_destroy(new);
 }
 
-/*
 Test(bbi_storage, load_dec_string_16bits) {
     bbi_chunk *new = bbi_fromstring_dec("12345");
     while (new->right != NULL) {
@@ -161,7 +160,6 @@ Test(bbi_storage, load_dec_string_16bits) {
     cr_assert(new->val == 12345);
     bbi_destroy(new);
 }
-*/
 
 /* Test either side of 32- and 64-bit boundaries, and bigger higher boundaries */
 /*

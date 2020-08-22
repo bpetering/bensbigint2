@@ -315,6 +315,44 @@ Test(bbi_bitwise, and_inplace_manychunks_equal) {
     bbi_destroy(list_b);
 }
 
+/* OR and XOR have exact same code as AND - except the operator used. 
+   Not worth testing, probably. */
+
+
+Test(bbi_bitwise, get_bit) {
+    bbi_chunk *list = bbi_create();
+    bbi_chunk *list2 = bbi_create_nchunks(2);
+
+    list->val = 1227838087;
+    cr_assert(bbi_get_bit(list, 0) == 1);
+    cr_assert(bbi_get_bit(list, 1) == 1);
+    cr_assert(bbi_get_bit(list, 2) == 1);
+    cr_assert(bbi_get_bit(list, 3) == 0);
+    cr_assert(bbi_get_bit(list, 4) == 0);
+    cr_assert(bbi_get_bit(list, 10) == 0);
+    cr_assert(bbi_get_bit(list, 16) == 1);
+    cr_assert(bbi_get_bit(list, 30) == 1);
+    cr_assert(bbi_get_bit(list, 31) == 0);
+
+    list2->val = 1344967868;
+    list2->left->val = 2031461461;
+    cr_assert(bbi_get_bit(list, 0) == 0);
+    cr_assert(bbi_get_bit(list, 2) == 1);
+    cr_assert(bbi_get_bit(list, 5) == 1);
+    cr_assert(bbi_get_bit(list, 15) == 1);
+    cr_assert(bbi_get_bit(list, 30) == 1);
+    cr_assert(bbi_get_bit(list, 31) == 0);
+    cr_assert(bbi_get_bit(list, 32) == 1);
+    cr_assert(bbi_get_bit(list, 33) == 0);
+    cr_assert(bbi_get_bit(list, 45) == 1);
+    cr_assert(bbi_get_bit(list, 60) == 1);
+    cr_assert(bbi_get_bit(list, 62) == 1);
+    cr_assert(bbi_get_bit(list, 63) == 0);
+
+    bbi_destroy(list);
+    bbi_destroy(list2);
+}
+
 /* Helper */
 Test(bbi_helper, dump_binary) {
     unsigned n = sizeof(unsigned int)*8+3+1;

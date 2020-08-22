@@ -143,7 +143,6 @@ Test(bbi_structures, list_copy) {
 }
 
 /* Storage and retrieval */
-/*
 Test(bbi_storage, load_dec_string_0) {
     bbi_chunk *new = bbi_fromstring_dec("0");
     while (new->right != NULL) {
@@ -153,6 +152,7 @@ Test(bbi_storage, load_dec_string_0) {
     bbi_destroy(new);
 }
 
+/*
 Test(bbi_storage, load_dec_string_16bits) {
     bbi_chunk *new = bbi_fromstring_dec("12345");
     while (new->right != NULL) {

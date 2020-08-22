@@ -156,7 +156,7 @@ bbi_chunk *bbi_copy(bbi_chunk *list) {
 */
 bbi_chunk *bbi_fromstring_dec(const unsigned char *s) {
     size_t slen = strlen(s); 
-    unsigned int sidx;
+    long sidx;      /* TODO size_t and long type compatibility */
     unsigned int curval;
     unsigned int oldcurval;
     

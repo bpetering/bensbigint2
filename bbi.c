@@ -268,7 +268,8 @@ bbi_chunk *bbi_and_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
         list_a = list_a->left;
         list_b = list_b->left;
     }
-    list_a->val &= list_b->val;
+    /* TODO optimization: if list lengths were originally unequal, just copy 0 values, since x&0 == 0 */
+    list_a->val &= list_b->val;     
     return _find_right(list_a);
 }
 

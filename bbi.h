@@ -23,7 +23,10 @@ bbi_chunk *bbi_fromstring_dec(const unsigned char *s);
 
 /* Bitwise operations */
 bbi_chunk *bbi_not(bbi_chunk *list);
+bbi_chunk *bbi_not_inplace(bbi_chunk *list);
+
 bbi_chunk *bbi_and(bbi_chunk *list_a, bbi_chunk *list_b);
+bbi_chunk *bbi_and_inplace(bbi_chunk *list_a, bbi_chunk *list_b);
 
 /* Helper */
 void _bbi_dump_binary_val(unsigned char *buf, unsigned int val);

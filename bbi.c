@@ -224,19 +224,28 @@ void bbi_destroy(bbi_chunk *list) {
     list = NULL;
 }
 
-/* Bitwise operations always produce a new value */
+/* Bitwise operations have two functions for each operation - an in-place operation, and one
+   that produces a new bigint */
 
 /* Bitwise NOT a value */
+bbi_chunk *bbi_not_inplace(bbi_chunk *list) {
+    bbi_chunk *list_right;
+    list = list_right = _find_right(list);
+    while (list->left != NULL) {
+        list->val = ~ list->val;
+        list = list->left;
+    }
+    list->val = ~ list->val;
+    return list_right;
+}
+
 bbi_chunk *bbi_not(bbi_chunk *list) {
     bbi_chunk *result = bbi_copy(list);
-    bbi_chunk *result_right = result;
+    return bbi_not_inplace(result);
+}
 
-    while (result->left != NULL) {
-        result->val = ~ result->val;
-        result = result->left;
-    }
-    result->val = ~ result->val;
-    return result_right;
+bbi_chunk *bbi_and_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
+
 }
 
 /* Bitwise AND two values. If one chunk list is longer than the other, the missing values are implicitly 

@@ -277,7 +277,7 @@ bbi_chunk *bbi_and_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
 
 bbi_chunk *bbi_and(bbi_chunk *list_a, bbi_chunk *list_b) {
     bbi_chunk *result = bbi_copy(list_a);
-    return bbi_and_inplace(list_a, list_b);
+    return bbi_and_inplace(result, list_b);
 }
 
 /*

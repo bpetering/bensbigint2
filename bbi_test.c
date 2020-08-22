@@ -171,7 +171,35 @@ Test(bbi_storage, load_dec_string_32bitsplusone) {
 */
 
 /* Bitwise operations */
-Test(bbi_bitwise, not1chunk) {
+Test(bbi_bitwise, not_inplace_copy_1chunk) {
+    bbi_chunk *list = bbi_create();
+    list->val = 100;
+    bbi_not_inplace(list);
+    cr_assert(list->val == ~ (unsigned int) 100);
+}
+
+Test(bbi_bitwise, not_inplace_manychunks) {
+    bbi_chunk *list = bbi_create_nchunks(50);
+    unsigned int i;
+    unsigned int tmp = 1;
+    while (list->left != NULL) {
+        list->val = tmp;
+        list = list->left;
+        tmp++;
+    }
+    list->val = tmp;
+
+    list = bbi_not_inplace(list);
+    for (i = 1; i <= 50; i++) {
+        cr_assert(list->val = ~i);
+        if (list->left != NULL) {
+            list = list->left;
+        }
+    }
+    bbi_destroy(list);
+}
+
+Test(bbi_bitwise, not_copy_1chunk) {
     bbi_chunk *list = bbi_create();
     bbi_chunk *result;
     list->val = 10;
@@ -182,7 +210,7 @@ Test(bbi_bitwise, not1chunk) {
     bbi_destroy(result);
 }
 
-Test(bbi_bitwise, notmanychunks) {
+Test(bbi_bitwise, not_copy_manychunks) {
     bbi_chunk *list = bbi_create_nchunks(50);
     bbi_chunk *result;
     unsigned int i;

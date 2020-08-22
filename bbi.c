@@ -143,7 +143,8 @@ bbi_chunk *bbi_add_inplace(bbi_chunk *list_a, bbi_chunk *list_b) {
 }
 
 bbi_chunk *bbi_add(bbi_chunk *list_a, bbi_chunk *list_b) {
-
+    bbi_chunk *result = bbi_copy(list_a);
+    return bbi_add_inplace(result, list_b);
 }
 
 /* Load a value from a string, in decimal - caller must bbi_destory()! */

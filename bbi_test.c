@@ -162,7 +162,6 @@ Test(bbi_storage, load_dec_string_16bits) {
 }
 
 /* Test either side of 32- and 64-bit boundaries, and bigger higher boundaries */
-/*
 Test(bbi_storage, load_dec_string_32bits) {
     bbi_chunk *new = bbi_fromstring_dec("4294967295");
     while (new->right != NULL) {
@@ -172,6 +171,7 @@ Test(bbi_storage, load_dec_string_32bits) {
     bbi_destroy(new);
 }
 
+/*
 Test(bbi_storage, load_dec_string_32bitsplusone) {
     bbi_chunk *new = bbi_fromstring_dec("4294967296");
     while (new->right != NULL) {

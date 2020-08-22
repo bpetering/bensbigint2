@@ -346,6 +346,34 @@ bbi_chunk *bbi_xor(bbi_chunk *list_a, bbi_chunk *list_b) {
     return bbi_xor_inplace(result, list_b);
 }
 
+/* Get the bit with index bitidx from a chunk list. Bit index 0 is the
+   rightmost (least significant) bit, to the left is bit index 1, and so on. */
+unsigned int *bbi_get_bit(bbi_chunk *list, unsigned int bitidx) {
+    unsigned int chunkbitsize = sizeof(unsigned int) * 8;   /* TODO 8-bit byte assumption */
+    unsigned int i;
+    unsigned int containing_chunk;
+    unsigned int mask = 1;
+    unsigned int tmpval;
+
+    /* Find chunk with bit requested - chunk 0 is chunk with least
+       significant bit. */
+    containing_chunk = bitidx / chunkbitsize;
+    i = 0;
+    while (list->left != NULL && i != containing_chunk) { 
+        list = list->left;
+        i++;
+    }
+    if (i != containing_chunk) {
+        /* Requested a non-stored bit index - implicitly 0 */
+        return 0;
+    }
+    /* Get the desired bit in this chunk */
+    bitidx %= chunkbitsize;
+    tmpval = list->val;
+    tmpval >>= bitidx;
+    return tmpval & mask;
+}
+
 /*
 int main() {
     bbi_chunk *list = bbi_create();
